@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const itemSchema = mongoose.Schema({
-  id: String,
+  itemId: String,
   name: String,
   logo: {
     imageUrl: String,
@@ -19,7 +19,7 @@ const itemSchema = mongoose.Schema({
 
 
 const schema = mongoose.Schema({
-  paymentId: String,
+  paymentToken: String,
   items: [itemSchema],
   price: {
     total: Number,

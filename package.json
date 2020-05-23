@@ -6,6 +6,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.14"
+    "mongoose": "^5.9.14",
+    "stripe": "^8.54.0"
   }
 }

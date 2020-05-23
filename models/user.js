@@ -5,7 +5,7 @@ const addressSchema = mongoose.Schema({
     userName: String,
     phone: String,
     town: String,
-    steet: String,
+    street: String,
     zipcode: String,
     city: String,
     state: String
@@ -13,7 +13,7 @@ const addressSchema = mongoose.Schema({
 
 
 const itemSchema = mongoose.Schema({
-  id: String,
+  itemId: String,
   imageUrl: String,
   logo: {
       imageUrl: String,
@@ -32,7 +32,7 @@ const orderSchema = mongoose.Schema({
     items: [itemSchema],
     address: addressSchema,
     price: {
-        total: Number,
+        totalPrice: Number,
         deliveryCharge: Number,
         tax: Number
     },

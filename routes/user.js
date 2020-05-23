@@ -9,6 +9,30 @@ router.get('/', async (req, res) => {
     res.send(users);
 });
 
+
+router.post("/getUser", async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id);
+    console.log(user);
+    if (user) {
+        return res.send({
+        status: 200,
+        user,
+        });
+    }
+    return res.send({
+      status: 500,
+      message: "user not found",
+    });
+  } catch (error) {
+    return res.send({
+      status: 500,
+      message: "An error occured at the server.",
+    });
+  }
+});
+
+
 {/*Creates a new user */}
 router.post('/signup', async (req, res) => {
     const user = new User({
@@ -23,27 +47,47 @@ router.post('/signup', async (req, res) => {
     });
 
    await user.save((err, user) => {
-     if (err) return res.sendStatus(500);
-     res.send(user);
+     if (err) {
+         console.log(err);
+         return res.sendStatus(500);
+     }
+     res.send({
+        status: 200, 
+        user
+     });
    });
 });
 
 {/*Gets user details by email id */}
 router.post('/login', async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
-    if(user) {
-        if(user.password === req.body.password ){
-            return res.send(user);
-        }
-        else{
-            return res.send({
-                message: 'Invalid password'
-            })
-        }
-    } 
-    return res.send({
-      message: "user not found",
-    });
+    try{
+         const user = await User.findOne({ email: req.body.email });
+         console.log(user);
+         if (user) {
+           if (user.password == req.body.password) {
+             return res.send({
+               status: 200,
+               user,
+             });
+           } else {
+             return res.send({
+               status: 500,
+               message: "Invalid password",
+             });
+           }
+         }
+         return res.send({
+            status: 500,
+            message: "Please enter a valid email",
+         });
+    }
+    catch(error){
+         return res.send({
+           status: 500,
+           message: "An error occured at the server.",
+         });
+    }
+   
 });
 
 
@@ -144,6 +188,27 @@ router.post('/addAddress', async (req, res) => {
 
         return res.send(user.addresses);
     });
-})
+});
+
+
+router.post('/getOrders', async (req, res) => {
+    try{
+        const user = await User.findById(req.body.userId);
+
+        if(user){
+            return res.send({
+                status: 200,
+                orders: user.orders
+            })
+        }
+
+        return res.send(500);
+
+    }
+
+    catch(error){
+        return res.send(500);
+    }
+});
 
 module.exports = router;
