@@ -188,7 +188,7 @@ async (req, res) => {
 const getPriceDetails = (items) => {
     let price = 0;
      for (let i = 0; i < items.length; i++) {
-       price = price + items[i].price;
+       price = price + items[i].price * Number(items[i].quantity);
      }
 
      let taxpc = 10;
