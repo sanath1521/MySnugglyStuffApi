@@ -13,6 +13,7 @@ const itemSchema = mongoose.Schema({
   imageUrl: String,
   category: String,
   categoryId: String,
+  quantity: String,
   size: String,
   price: Number,
 });

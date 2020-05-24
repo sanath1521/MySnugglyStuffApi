@@ -24,6 +24,7 @@ const itemSchema = mongoose.Schema({
   category: String,
   categoryId: String,
   size: String,
+  quantity: String,
   price: Number,
 });
 
