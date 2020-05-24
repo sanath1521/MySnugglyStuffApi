@@ -121,8 +121,8 @@ const saveImgInAWS = async (base64Img, id) => {
 
 const saveImgAWS = async (req, res, next) => {
 
-  console.log('SAVING IMAGE');
-   let url = await saveImgInAWS(
+  if(req.body.item.logo.imageBase64){
+    let url = await saveImgInAWS(
       req.body.item.logo.imageBase64,
       req.body.userId,
       next
@@ -131,6 +131,10 @@ const saveImgAWS = async (req, res, next) => {
     req.logoImgUrl = url;
 
     next();
+  }
+
+  next();
+   
 }
 
 
