@@ -35,4 +35,4 @@ app.get('/', (req, res) => {
 console.log(app.get('env'));
 console.log(process.env.NODE_ENV)
 
-app.listen(port, () => console.log('The server is up'));
+app.listen(port, () => console.log(`The server is up at port ${port}`));

@@ -7,6 +7,7 @@
     "node": "12.14.1"
   },
   "dependencies": {
+    "aws-sdk": "^2.683.0",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "mongoose": "^5.9.14",

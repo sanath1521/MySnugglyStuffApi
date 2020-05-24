@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const AWS  = require('aws-sdk');
+
+
+AWS.config.loadFromPath("./s3config.json");
+
+let s3Bucket = new AWS.S3({ params: { Bucket: "snugglybucket" } });
 
 
 {/*Gets all users */}
@@ -13,7 +19,6 @@ router.get('/', async (req, res) => {
 router.post("/getUser", async (req, res) => {
   try {
     const user = await User.findById(req.body.id);
-    console.log(user);
     if (user) {
         return res.send({
         status: 200,
@@ -48,7 +53,6 @@ router.post('/signup', async (req, res) => {
 
    await user.save((err, user) => {
      if (err) {
-         console.log(err);
          return res.sendStatus(500);
      }
      res.send({
@@ -62,7 +66,6 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try{
          const user = await User.findOne({ email: req.body.email });
-         console.log(user);
          if (user) {
            if (user.password == req.body.password) {
              return res.send({
@@ -91,23 +94,89 @@ router.post('/login', async (req, res) => {
 });
 
 
+const saveImgInAWS = async (base64Img, id) => {
+  let buf = new Buffer(
+    base64Img.replace(/^data:image\/\w+;base64,/, ""),
+    "base64"
+  );
+
+  let data = {
+    Key: id,
+    Body: buf,
+    ContentEncoding: "base64",
+    ContentType: "image/jpeg",
+  };
+
+
+
+  const result = await s3Bucket.upload(data).promise();
+  if(result.Location){
+    return result.Location;
+  } 
+  
+  return null;
+
+}
+
+
+const saveImgAWS = async (req, res, next) => {
+
+  console.log('SAVING IMAGE');
+   let url = await saveImgInAWS(
+      req.body.item.logo.imageBase64,
+      req.body.userId,
+      next
+    );
+
+    req.logoImgUrl = url;
+
+    next();
+}
+
+
+router.post('/saveImage', async (req, res) => {
+  const data = await saveImgInAWS(req.body.base64Img, req.body.userId);
+  return res.send(data);
+})
+
+
 {/* Saves item added to shopping bag*/}
-router.post('/saveItem', async (req, res) => {
-    const user = await User.findById(req.body.userId);
+router.post('/saveItem', 
+saveImgAWS,
+async (req, res) => {
 
+  const user = await User.findById(req.body.userId);
 
-    //Before saving store logo image base64 in AWS. Write a function for this
+  if(user){
+
+    let logo = {
+      imageUrl: req.logoImgUrl,
+      text: req.body.item.logo.text
+    };
+  
+    req.body.item.logo = logo;
+
+    //Before saving, store logo image base64 in AWS. Write a function for this
     user.savedItems.push(req.body.item);
 
     user.save((err, user) => {
-        if(err) 
+      if (err)
         return res.send({
-            message: 'An error occured',
-            status: 500
+          message: "An error occured",
+          status: 500,
         });
 
-        return res.send(user);
+      return res.send(user);
     });
+  }
+
+  else{
+    return res.send({
+      message: "An error occured",
+      status: 500,
+    });
+  }
+   
 
 })
 
@@ -210,5 +279,33 @@ router.post('/getOrders', async (req, res) => {
         return res.send(500);
     }
 });
+
+
+router.post('/updateUserDetails', async (req, res) => {
+  let user = await User.findById(req.body.userId);
+  if(user){
+    let { name, phone, email, password } = req.body;
+
+    user.name = name;
+    user.phone = phone;
+    user.email = email;
+    user.password = password;
+
+    user.save((err, user) => {
+      if(err) return res.send({status: 500});
+
+      return res.send({
+        status: 200,
+        user
+      });
+
+    })
+  } 
+
+  else{
+    return res.send({ status: 500 });
+  }
+  
+})
 
 module.exports = router;
