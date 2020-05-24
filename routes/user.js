@@ -178,13 +178,13 @@ async (req, res) => {
     });
   }
 
-  else{
-    console.log("ELSE LOOP");
-    return res.send({
-      message: "An error occured",
-      status: 500,
-    });
-  }
+  // else{
+  //   console.log("ELSE LOOP");
+  //   return res.send({
+  //     message: "An error occured",
+  //     status: 500,
+  //   });
+  // }
    
 
 })
