@@ -111,6 +111,7 @@ const saveImgInAWS = async (base64Img, id) => {
 
   const result = await s3Bucket.upload(data).promise();
   if(result.Location){
+    console.log("IMAGE SAVED AND RETURNING");
     return result.Location;
   } 
   
@@ -120,7 +121,7 @@ const saveImgInAWS = async (base64Img, id) => {
 
 
 const saveImgAWS = async (req, res, next) => {
-
+  console.log("SAVING IMAGE");
   if(req.body.item.logo.imageBase64){
     let url = await saveImgInAWS(
       req.body.item.logo.imageBase64,
@@ -128,8 +129,10 @@ const saveImgAWS = async (req, res, next) => {
       next
     );
 
-    req.logoImgUrl = url;
+    console.log("GOT IMAGE URL");
 
+    req.logoImgUrl = url;
+      console.log("CALLING NEXT");
     next();
   }
 
@@ -148,9 +151,9 @@ router.post('/saveImage', async (req, res) => {
 router.post('/saveItem', 
 saveImgAWS,
 async (req, res) => {
-
+  console.log('NEXT CALLED');
   const user = await User.findById(req.body.userId);
-
+  console.log('USER FOUND');
   if(user){
 
     let logo = {
@@ -162,7 +165,7 @@ async (req, res) => {
 
     //Before saving, store logo image base64 in AWS. Write a function for this
     user.savedItems.push(req.body.item);
-
+    console.log("USER SAVING");
     user.save((err, user) => {
       if (err)
         return res.send({
@@ -170,11 +173,13 @@ async (req, res) => {
           status: 500,
         });
 
+        console.log('RETURNING USER');
       return res.send(user);
     });
   }
 
   else{
+    console.log("ELSE LOOP");
     return res.send({
       message: "An error occured",
       status: 500,
