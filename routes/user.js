@@ -132,8 +132,8 @@ const saveImgAWS = async (req, res, next) => {
     console.log("GOT IMAGE URL");
 
     req.logoImgUrl = url;
-      console.log("CALLING NEXT");
-    next();
+    console.log("CALLING NEXT");
+    // next();
   }
 
   next();
