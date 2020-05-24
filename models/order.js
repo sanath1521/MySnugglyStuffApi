@@ -22,7 +22,7 @@ const schema = mongoose.Schema({
   paymentToken: String,
   items: [itemSchema],
   price: {
-    total: Number,
+    totalPrice: Number,
     deliveryCharge: Number,
     tax: Number,
   },
