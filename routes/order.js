@@ -37,10 +37,11 @@ router.post('/getOrder', async (req, res) => {
 
 const addOrderToUser = async (req, res) => {
     const orderDetails = req.order;
+    console.log(orderDetails);
     console.log('ORDER CREATED');
     let user = await User.findById(orderDetails.user.id);
     let order = {
-      orderId: orderDetails.id,
+      orderId: orderDetails._id,
       items: orderDetails.items,
       address: orderDetails.address,
       price: orderDetails.price,
@@ -114,7 +115,7 @@ router.post(
       })
       .then((charge) => {
         console.log(charge);
-        req.body.chargeId = charge.id;
+        req.chargeId = charge.id;
         // req.payload = req.body;
         return next();
       })
@@ -128,6 +129,7 @@ router.post(
     try {
       const order = new Order({
         ...req.body,
+        chargeId: req,chargeId,
         status: "received",
         createdOn: new Date(),
       });
@@ -152,7 +154,15 @@ router.post(
 
 router.post('/updateStatus', async (req, res) => {
   let order = await Order.findById(req.body.orderId);
+
+  let user = await User.findById(req.body.userId);
+
   order.status = req.body.status;
+
+  // user.orders.forEach(el => {
+  //   if(el.)
+  // });
+
   await order.save((err, order) => {
     if(err) return res.send({
       status: 500
