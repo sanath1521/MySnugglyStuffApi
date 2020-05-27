@@ -7,7 +7,6 @@ const stripe = require('stripe')('sk_test_oSMjhjXOPlWLBKflyszZjXGf00EcI2NeoZ');
 
 {/*Gets all Orders*/}
 router.get('/', async (req, res) => {
-  console.log('afb');
     const orders = await Order.find();
     if(orders){
       return res.send({
