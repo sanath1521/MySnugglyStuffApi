@@ -6,9 +6,20 @@ const stripe = require('stripe')('sk_test_oSMjhjXOPlWLBKflyszZjXGf00EcI2NeoZ');
 
 
 {/*Gets all Orders*/}
-router.get('/', (req, res) => {
-    const orders = Order.find();
-    res.send(orders)
+router.get('/', async (req, res) => {
+  console.log('afb');
+    const orders = await Order.find();
+    if(orders){
+      return res.send({
+        status: 200,
+        orders,
+      });
+    }
+
+    return res.send({
+      status: 500
+    });
+    
 });
 
 {/*Gets particular order by order id*/}
@@ -138,5 +149,21 @@ router.post(
   addOrderToUser
 );
 
+
+
+router.post('/updateStatus', async (req, res) => {
+  let order = await Order.findById(req.body.orderId);
+  order.status = req.body.status;
+  await order.save((err, order) => {
+    if(err) return res.send({
+      status: 500
+    });
+
+    return res.send({
+      status: 200,
+      order
+    });
+  })
+})
 
 module.exports = router;

@@ -121,18 +121,12 @@ const saveImgInAWS = async (base64Img, id) => {
 
 
 const saveImgAWS = async (req, res, next) => {
-  console.log("SAVING IMAGE");
   if(req.body.item.logo.imageBase64){
     let url = await saveImgInAWS(
       req.body.item.logo.imageBase64,
       req.body.userId,
-      next
     );
-
-    console.log("GOT IMAGE URL");
-
     req.logoImgUrl = url;
-    console.log("CALLING NEXT");
     // next();
   }
 
@@ -141,19 +135,17 @@ const saveImgAWS = async (req, res, next) => {
 }
 
 
-router.post('/saveImage', async (req, res) => {
-  const data = await saveImgInAWS(req.body.base64Img, req.body.userId);
-  return res.send(data);
-})
+// router.post('/saveImage', async (req, res) => {
+//   const data = await saveImgInAWS(req.body.base64Img, req.body.userId);
+//   return res.send(data);
+// })
 
 
 {/* Saves item added to shopping bag*/}
 router.post('/saveItem', 
 saveImgAWS,
 async (req, res) => {
-  console.log('NEXT CALLED');
   const user = await User.findById(req.body.userId);
-  console.log('USER FOUND');
   if(user){
 
     let logo = {
@@ -165,7 +157,6 @@ async (req, res) => {
 
     //Before saving, store logo image base64 in AWS. Write a function for this
     user.savedItems.push(req.body.item);
-    console.log("USER SAVING");
     user.save((err, user) => {
       if (err)
         return res.send({
@@ -316,5 +307,7 @@ router.post('/updateUserDetails', async (req, res) => {
   }
   
 })
+
+router.saveImgInAWS = saveImgInAWS;
 
 module.exports = router;

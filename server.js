@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 const app = express();
 const mongoose = require('mongoose');
 
+mongoose.set("useFindAndModify", false);
+
 mongoose
   .connect(
     "mongodb+srv://newuser123:newuser123@cluster0-ovxgm.mongodb.net/test?retryWrites=true&w=majority",

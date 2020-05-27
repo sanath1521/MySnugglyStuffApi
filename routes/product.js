@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
+const user = require("./user");
+const { v4: uuidv4 } = require("uuid");
 
 {/*Gets all products */}
 router.get('/', async (req, res) => {
@@ -25,19 +27,45 @@ router.post('/getProduct', async (req, res) => {
 });
 
 router.post('/addProduct', async (req, res) => {
+    const imageUrl = await user.saveImgInAWS(req.body.imageBase64, uuidv4()); ;
+    const { name, description, category, categoryId, sizes, price } = req.body;
     const product = new Product({
-        ...req.body,
-        createdOn: new Date()
+      name,
+      imageUrl,
+      description,
+      category,
+      categoryId,
+      sizes,
+      price,
+      isAvailable: true,
+      createdOn: new Date(),
     });
 
     await product.save((err, product) => {
         if(err) return res.send({
+            status: 500,
             message: 'An error occured'
         });
-        return res.send(product);
+        return res.send({
+            status: 200,
+            product
+        });
     })
 });
 
+
+router.post("/delete", async (req, res, next) => {
+  await Product.findByIdAndRemove(req.body.id, (err) => {
+    if (err)
+      return res.send({
+        status: 500,
+      });
+
+    return res.send({
+      status: 200,
+    });
+  });
+});
 
 
 module.exports = router;

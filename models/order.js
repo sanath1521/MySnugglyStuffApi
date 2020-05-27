@@ -30,7 +30,7 @@ const schema = mongoose.Schema({
   user: {
     id: String,
     name: String,
-    mobile: Number,
+    phone: Number,
     email: String,
   },
   address: {
@@ -43,6 +43,7 @@ const schema = mongoose.Schema({
     zipcode: String,
   },
   status: String,
+  createdOn: String,
 });
 
 

@@ -1,9 +1,10 @@
 const express = require('express');
 const Category = require('../models/category');
 const router = express.Router();
+const user = require('./user');
+const { v4: uuidv4 } = require("uuid");
 
-
-
+console.log(user.saveImgInAWS);
 {/*Gets all categories */}
 router.get('/',async (req, res, next) => {
     const categories = await Category.find();
@@ -17,18 +18,39 @@ router.get('/:id', async (req, res) => {
 
 
 {/*creates a new category */}
-router.post('/', async(req, res, next) => {
+router.post('/', 
+async (req, res, next) => {
+    const imageUrl = await user.saveImgInAWS(req.body.imageBase64, uuidv4()); ;
     const category = new Category({
         name: req.body.name,
-        imageUrl: req.body.imageUrl,
-        description: req.body.description
+        imageUrl,
+        description: req.body.description,
+        isAvailable: true
+
     });
     await category.save((err) => {
-        if(err) return res.send(500);
-        res.send(200);
+        if(err) return res.send({
+            status: 500
+        });
+        res.send({
+            status: 200,
+            category
+        });
     });
     
 });
+
+router.post('/delete', async(req, res, next) => {
+    await Category.findByIdAndRemove(req.body.id, (err) => {
+        if(err) return res.send({
+            status: 500
+        })
+
+        return res.send({
+            status: 200
+        });
+    });
+})
 
 
 module.exports = router;
