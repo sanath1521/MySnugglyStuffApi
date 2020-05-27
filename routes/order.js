@@ -129,7 +129,7 @@ router.post(
     try {
       const order = new Order({
         ...req.body,
-        chargeId: req,chargeId,
+        chargeId: req.chargeId,
         status: "received",
         createdOn: new Date(),
       });

@@ -21,6 +21,7 @@ const itemSchema = mongoose.Schema({
 
 const schema = mongoose.Schema({
   paymentToken: String,
+  chargeId: String,
   items: [itemSchema],
   price: {
     totalPrice: Number,
