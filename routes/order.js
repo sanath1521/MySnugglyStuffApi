@@ -41,7 +41,7 @@ const addOrderToUser = async (req, res) => {
     console.log('ORDER CREATED');
     let user = await User.findById(orderDetails.user.id);
     let order = {
-      orderId: orderDetails._id,
+      id: orderDetails._id,
       items: orderDetails.items,
       address: orderDetails.address,
       price: orderDetails.price,

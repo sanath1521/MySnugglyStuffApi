@@ -28,18 +28,21 @@ const itemSchema = mongoose.Schema({
   price: Number,
 });
 
-const orderSchema = mongoose.Schema({
+const orderSchema = mongoose.Schema(
+  {
     id: String,
     items: [itemSchema],
     address: addressSchema,
     price: {
-        totalPrice: Number,
-        deliveryCharge: Number,
-        tax: Number
+      totalPrice: Number,
+      deliveryCharge: Number,
+      tax: Number,
     },
     status: String,
-    createdOn: Date
-});
+    createdOn: Date,
+  },
+  { _id: false }
+);
 
 
 const schema = mongoose.Schema({
