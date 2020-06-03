@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 
 mongoose
   .connect(
-    "mongodb+srv://newuser123:newuser123@cluster0-ovxgm.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb+srv://user:sunny1521@cluster0-i3tju.mongodb.net/test?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true },
   )
   .then(() => console.log("Connected to db"));
