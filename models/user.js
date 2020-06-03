@@ -5,7 +5,7 @@ const addressSchema = mongoose.Schema({
     userName: String,
     phone: String,
     town: String,
-    steet: String,
+    street: String,
     zipcode: String,
     city: String,
     state: String
@@ -13,7 +13,7 @@ const addressSchema = mongoose.Schema({
 
 
 const itemSchema = mongoose.Schema({
-  id: String,
+  itemId: String,
   imageUrl: String,
   logo: {
       imageUrl: String,
@@ -24,21 +24,25 @@ const itemSchema = mongoose.Schema({
   category: String,
   categoryId: String,
   size: String,
+  quantity: String,
   price: Number,
 });
 
-const orderSchema = mongoose.Schema({
+const orderSchema = mongoose.Schema(
+  {
     id: String,
     items: [itemSchema],
     address: addressSchema,
     price: {
-        total: Number,
-        deliveryCharge: Number,
-        tax: Number
+      totalPrice: Number,
+      deliveryCharge: Number,
+      tax: Number,
     },
     status: String,
-    createdOn: Date
-});
+    createdOn: Date,
+  },
+  { _id: false }
+);
 
 
 const schema = mongoose.Schema({

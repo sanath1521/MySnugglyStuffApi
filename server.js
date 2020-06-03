@@ -5,9 +5,11 @@ const catergoryRouter = require('./routes/category');
 const orderRouter = require("./routes/order");
 const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
-const port = 3000;
+const port = process.env.PORT || 5000;
 const app = express();
 const mongoose = require('mongoose');
+
+mongoose.set("useFindAndModify", false);
 
 mongoose
   .connect(
@@ -15,8 +17,15 @@ mongoose
     { useNewUrlParser: true, useUnifiedTopology: true },
   )
   .then(() => console.log("Connected to db"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+
 app.use(cookieParer())
 
 
@@ -35,4 +44,4 @@ app.get('/', (req, res) => {
 console.log(app.get('env'));
 console.log(process.env.NODE_ENV)
 
-app.listen(port, () => console.log('The server is up'));
+app.listen(port, () => console.log(`The server is up at port ${port}`));

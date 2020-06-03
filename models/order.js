@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const itemSchema = mongoose.Schema({
-  id: String,
+  itemId: String,
   name: String,
   logo: {
     imageUrl: String,
@@ -13,23 +13,25 @@ const itemSchema = mongoose.Schema({
   imageUrl: String,
   category: String,
   categoryId: String,
+  quantity: String,
   size: String,
   price: Number,
 });
 
 
 const schema = mongoose.Schema({
-  paymentId: String,
+  paymentToken: String,
+  chargeId: String,
   items: [itemSchema],
   price: {
-    total: Number,
+    totalPrice: Number,
     deliveryCharge: Number,
     tax: Number,
   },
   user: {
     id: String,
     name: String,
-    mobile: Number,
+    phone: Number,
     email: String,
   },
   address: {
@@ -42,6 +44,7 @@ const schema = mongoose.Schema({
     zipcode: String,
   },
   status: String,
+  createdOn: String,
 });
 
 
