@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/order');
 const User = require('../models/user');
-const stripe = require('stripe')('sk_test_oSMjhjXOPlWLBKflyszZjXGf00EcI2NeoZ');
+const stripe = require('stripe')('sk_test_3gGwnFfFvzxDnfMysuNLX4P900Hv28afPR');
 
 
 {/*Gets all Orders*/}
