@@ -188,7 +188,7 @@ const getPriceDetails = (items) => {
      }
 
      let taxpc = 10;
-     let deliveryCharge = 15;
+     let deliveryCharge = 10;
      return {
                 totalPrice: price,
                 tax: Math.ceil(price * (taxpc / 100)),
