@@ -159,9 +159,12 @@ router.post('/updateStatus', async (req, res) => {
 
   order.status = req.body.status;
 
-  // user.orders.forEach(el => {
-  //   if(el.)
-  // });
+  user.orders.forEach(el => {
+    if(el.id == req.body.orderId){
+      el.status = req.body.status;
+    }
+  });
+
 
   await order.save((err, order) => {
     if(err) return res.send({
