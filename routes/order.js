@@ -166,7 +166,7 @@ router.post('/updateStatus', async (req, res) => {
   });
 
 
-  await user.save((err, user) => {
+  await user.save(async (err, user) => {
     if (err)
       return res.send({
         status: 500,
