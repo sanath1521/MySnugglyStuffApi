@@ -166,15 +166,22 @@ router.post('/updateStatus', async (req, res) => {
   });
 
 
-  await order.save((err, order) => {
-    if(err) return res.send({
-      status: 500
-    });
+  await user.save((err, user) => {
+    if (err)
+      return res.send({
+        status: 500,
+      });
 
-    return res.send({
-      status: 200,
-      order
-    });
+    await order.save((err, order) => {
+      if(err) return res.send({
+        status: 500
+      });
+
+      return res.send({
+        status: 200,
+        order
+      });
+    })
   })
 })
 
