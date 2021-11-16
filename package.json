@@ -7,7 +7,7 @@
     "node": "12.16.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.683.0",
+    "aws-sdk": "^2.814.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
